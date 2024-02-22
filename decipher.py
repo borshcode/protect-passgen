@@ -1,8 +1,10 @@
-# This is decipher v. 0.1
+# This is decipher v. 1.0
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import *
+
 from random import choice, randint
+import sys
 
-
-data = input().split(' ')
 
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 
@@ -81,12 +83,59 @@ def pass_gen(count: int = 8):
     return result
 
 
+def print_help():
+    print('''
+python decipher.py [option]
+-E Encipher
+-D Decipher
+--passgen Password Generator
+-h Help
+--help Help''')
+mode = ''
 
-if data[0] == 'decipher':
-    print(decipher(data[1]))
-elif data[0] == 'encipher':
-    print(encipher(data[1]))
-elif data[0] == 'passgen':
-    print(pass_gen(int(data[1])))
-else:
-    print('Данной команды не существует!')
+#PyQt5
+app = QApplication([])
+main_wdg = QWidget()
+main_wdg.setWindowTitle('Passgen v.0.2')
+main_wdg.resize(200, 100)
+
+decipher_mode_btn = QPushButton('Decipher')
+encipher_mode_btn = QPushButton('Encipher')
+passgen_mode_btn = QPushButton('PassGen')
+
+input_le = QLineEdit()
+input_le.setPlaceholderText('Input:')
+
+output_le = QLineEdit()
+output_le.setPlaceholderText('Output:')
+
+ok_btn = QPushButton('Ok!')
+
+main_line = QHBoxLayout()
+v1_line = QVBoxLayout()
+v2_line = QVBoxLayout()
+
+v1_line.addWidget(decipher_mode_btn, alignment=Qt.AlignCenter)
+v1_line.addWidget(encipher_mode_btn, alignment=Qt.AlignCenter)
+v1_line.addWidget(passgen_mode_btn, alignment=Qt.AlignCenter)
+
+v2_line.addWidget(input_le, alignment=Qt.AlignCenter)
+v2_line.addWidget(output_le,alignment=Qt.AlignCenter)
+v2_line.addWidget(ok_btn, alignment=Qt.AlignCenter)
+
+main_line.addLayout(v1_line)
+main_line.addLayout(v2_line)
+main_wdg.setLayout(main_line)
+
+
+# if sys.argv[1] == '-E':
+#     print(encipher(sys.argv[2]))
+# elif sys.argv[1] == '-D':
+#     print(decipher(sys.argv[2]))
+# elif sys.argv[1] == '--passgen':
+#     print(pass_gen(int(sys.argv[2])))
+# elif sys.argv[1] == '-h' or sys.argv[1] == '--help':
+#     print_help()
+
+main_wdg.show()
+app.exec_()
