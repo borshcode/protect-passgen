@@ -78,9 +78,9 @@ def pass_gen(count: int = 8):
             symbol = symbol.upper()
         
         result += symbol
-    result += f'\n{encipher(result)}'
+    password = encipher(result)
     
-    return result
+    return password, result
 
 
 def print_help():
@@ -100,6 +100,7 @@ def decipher_mode():
     encipher_mode_btn.setEnabled(True)
     passgen_mode_btn.setEnabled(True)
     ok_btn.setEnabled(True)
+    code_le.hide()
     mode = 'decipher'
 
 
@@ -109,6 +110,7 @@ def encipher_mode():
     encipher_mode_btn.setDisabled(True)
     passgen_mode_btn.setEnabled(True)
     ok_btn.setEnabled(True)
+    code_le.hide()
     mode  = 'encipher'
 
 
@@ -118,6 +120,7 @@ def passgen_mode():
     encipher_mode_btn.setEnabled(True)
     passgen_mode_btn.setDisabled(True)
     ok_btn.setEnabled(True)
+    code_le.show()
     mode = 'passgen'
 
 
@@ -133,8 +136,9 @@ def ok_handler():
         data = encipher(input_le.text())
         output_le.setText(data)
     elif mode == 'passgen':
-        data = pass_gen(int(input_le.text()))
-        output_le.setText(data)
+        password, code = pass_gen(int(input_le.text()))
+        code_le.setText(code)
+        output_le.setText(password)
 
 
 app = QApplication([])
@@ -153,6 +157,11 @@ output_le = QLineEdit()
 output_le.setPlaceholderText('Output:')
 output_le.setReadOnly(True)
 
+code_le = QLineEdit()
+code_le.setPlaceholderText('Password:')
+code_le.setReadOnly(True)
+code_le.hide()
+
 ok_btn = QPushButton('Ok!')
 ok_btn.setDisabled(True)
 
@@ -165,6 +174,7 @@ v1_line.addWidget(encipher_mode_btn, alignment=Qt.AlignCenter)
 v1_line.addWidget(passgen_mode_btn, alignment=Qt.AlignCenter)
 
 v2_line.addWidget(input_le, alignment=Qt.AlignCenter)
+v2_line.addWidget(code_le, alignment=Qt.AlignCenter)
 v2_line.addWidget(output_le,alignment=Qt.AlignCenter)
 v2_line.addWidget(ok_btn, alignment=Qt.AlignCenter)
 
@@ -180,3 +190,4 @@ ok_btn.clicked.connect(ok_handler)
 
 main_wdg.show()
 app.exec_()
+
