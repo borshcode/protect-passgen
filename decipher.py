@@ -94,6 +94,49 @@ python decipher.py [option]
 mode = ''
 
 #PyQt5
+def decipher_mode():
+    global mode
+    decipher_mode_btn.setDisabled(True)
+    encipher_mode_btn.setEnabled(True)
+    passgen_mode_btn.setEnabled(True)
+    ok_btn.setEnabled(True)
+    mode = 'decipher'
+
+
+def encipher_mode():
+    global mode
+    decipher_mode_btn.setEnabled(True)
+    encipher_mode_btn.setDisabled(True)
+    passgen_mode_btn.setEnabled(True)
+    ok_btn.setEnabled(True)
+    mode  = 'encipher'
+
+
+def passgen_mode():
+    global mode
+    decipher_mode_btn.setEnabled(True)
+    encipher_mode_btn.setEnabled(True)
+    passgen_mode_btn.setDisabled(True)
+    ok_btn.setEnabled(True)
+    mode = 'passgen'
+
+
+def ok_handler():
+    global mode
+    if input_le.text() == '':
+        output_le.setText('Введите данные!')
+        return
+    if mode == 'decipher':
+        data = decipher(input_le.text())
+        output_le.setText(data)
+    elif mode == 'encipher':
+        data = encipher(input_le.text())
+        output_le.setText(data)
+    elif mode == 'passgen':
+        data = pass_gen(int(input_le.text()))
+        output_le.setText(data)
+
+
 app = QApplication([])
 main_wdg = QWidget()
 main_wdg.setWindowTitle('Passgen v.0.2')
@@ -108,8 +151,10 @@ input_le.setPlaceholderText('Input:')
 
 output_le = QLineEdit()
 output_le.setPlaceholderText('Output:')
+output_le.setReadOnly(True)
 
 ok_btn = QPushButton('Ok!')
+ok_btn.setDisabled(True)
 
 main_line = QHBoxLayout()
 v1_line = QVBoxLayout()
@@ -128,14 +173,10 @@ main_line.addLayout(v2_line)
 main_wdg.setLayout(main_line)
 
 
-# if sys.argv[1] == '-E':
-#     print(encipher(sys.argv[2]))
-# elif sys.argv[1] == '-D':
-#     print(decipher(sys.argv[2]))
-# elif sys.argv[1] == '--passgen':
-#     print(pass_gen(int(sys.argv[2])))
-# elif sys.argv[1] == '-h' or sys.argv[1] == '--help':
-#     print_help()
+decipher_mode_btn.clicked.connect(decipher_mode)
+encipher_mode_btn.clicked.connect(encipher_mode)
+passgen_mode_btn.clicked.connect(passgen_mode)
+ok_btn.clicked.connect(ok_handler)
 
 main_wdg.show()
 app.exec_()
